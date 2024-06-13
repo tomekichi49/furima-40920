@@ -1,12 +1,21 @@
+document.addEventListener("DOMContentLoaded", () => {
+  const priceInput = document.getElementById("item-price");
+  const addTaxPrice = document.getElementById("add-tax-price");
+  const profitElement = document.getElementById("profit");
 
-const priceInput = document.getElementById("item-price");
-priceInput.addEventListener("input", () => {
-  const inputValue = priceInput.value;
-  console.log(inputValue);
-})
+  priceInput.addEventListener("input", () => {
+    const inputValue = parseFloat(priceInput.value);
 
-const commissionFee = document.getElementById("add-tax-price");
-console.log(commissionFee);
+    if (!isNaN(inputValue) && inputValue > 0) {
+      const commissionRate = 0.1;
+      const commissionFee = Math.floor(inputValue * commissionRate);
+      const profit = Math.floor(inputValue - commissionFee);
 
-const totalProfit = document.getElementById("profit");
-console.log(totalProfit);
+      addTaxPrice.innerHTML = commissionFee;
+      profitElement.innerHTML = profit;
+    } else {
+      addTaxPrice.innerHTML = 0;
+      profitElement.innerHTML = 0;
+    }
+  });
+});
