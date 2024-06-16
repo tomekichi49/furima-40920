@@ -17,5 +17,19 @@ class PurchaseForm
     validates :addresses
     validates :phone_number, format: { with: /\A\d{10,11}\z/, message: 'は10桁または11桁の半角数字で入力してください' }
   end
-  
+
+  def save
+    return false unless valid?
+
+    purchase = Purchase.create(user_id: user_id, item_id: item_id)
+    ShippingAddress.create(
+      purchase_id: purchase.id,
+      postal_code: postal_code,
+      prefecture_id: prefecture_id,
+      city: city,
+      addresses: addresses,
+      building: building,
+      phone_number: phone_number
+    )
+  end
 end
