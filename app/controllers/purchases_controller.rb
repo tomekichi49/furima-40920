@@ -1,18 +1,17 @@
 class PurchasesController < ApplicationController
+  before_action :authenticate_user!
 
   def index
-  end
-
-  def new
     @purchase_form = PurchaseForm.new
   end
 
   def create
     @purchase_form = PurchaseForm.new(purchase_params)
+    
     if @purchase_form.save
       redirect_to root_path
     else
-      render :new
+      render :index
     end
   end
 
