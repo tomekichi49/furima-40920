@@ -7,12 +7,12 @@ class PurchasesController < ApplicationController
   end
 
   def create
-
     @purchase_form = PurchaseForm.new(purchase_params.merge(user_id: current_user.id, item_id: @item.id))
     
     if @purchase_form.save
       redirect_to root_path
     else
+      puts @purchase_form.errors.full_messages
       render :index
     end
   end
