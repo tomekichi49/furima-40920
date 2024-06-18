@@ -18,6 +18,12 @@ RSpec.describe PurchaseForm, type: :model do
     end
 
     context '商品購入がうまくいかないとき' do
+      it 'トークンが空では登録できない' do
+        @purchase_form.token = ''
+        @purchase_form.valid?
+        expect(@purchase_form.errors.full_messages).to include("Token can't be blank")
+      end
+      
       it '郵便番号が空では登録できない' do
           @purchase_form.postal_code = ''
           @purchase_form.valid?
