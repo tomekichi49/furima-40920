@@ -7,10 +7,15 @@ class PurchasesController < ApplicationController
   end
 
   def create
-    binding.pry
     @purchase_form = PurchaseForm.new(purchase_params.merge(user_id: current_user.id, item_id: @item.id))
-    
+
     if @purchase_form.save
+      Payjp.api_key = "sk_test_0c5df3b245667609ff263aea"
+      Payjp::Charge.create(
+        amount: @item.price,
+        card: @purchase_form.token,
+        currency: 'jpy'
+      )
       redirect_to root_path
     else
       puts @purchase_form.errors.full_messages

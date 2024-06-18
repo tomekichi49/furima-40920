@@ -5,7 +5,7 @@ class PurchaseForm
   attr_accessor :user_id, :item_id
 
   # 発送先情報用の属性
-  attr_accessor :postal_code, :prefecture_id, :city, :addresses, :building, :phone_number
+  attr_accessor :token, :postal_code, :prefecture_id, :city, :addresses, :building, :phone_number
 
   # バリデーションの定義
   with_options presence: true do
@@ -24,7 +24,7 @@ class PurchaseForm
 
     purchase = Purchase.create(user_id: user_id, item_id: item_id)
     ShippingAddress.create(
-      purchase_id: purchase_id,
+      purchase_id: purchase.id,
       postal_code: postal_code,
       prefecture_id: prefecture_id,
       city: city,
