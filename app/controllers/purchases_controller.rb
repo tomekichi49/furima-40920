@@ -10,12 +10,7 @@ class PurchasesController < ApplicationController
     @purchase_form = PurchaseForm.new(purchase_params.merge(user_id: current_user.id, item_id: @item.id))
 
     if @purchase_form.save
-      Payjp.api_key = "sk_test_0c5df3b245667609ff263aea"
-      Payjp::Charge.create(
-        amount: @item.price,
-        card: @purchase_form.token,
-        currency: 'jpy'
-      )
+      pay_item
       redirect_to root_path
     else
       puts @purchase_form.errors.full_messages
@@ -33,4 +28,14 @@ class PurchasesController < ApplicationController
     params.require(:purchase_form).permit(:postal_code, :prefecture_id, :city, :addresses, :building, :phone_number, :token)
     .merge(token: params[:token])
   end
+
+  def pay_item
+  Payjp.api_key = "sk_test_0c5df3b245667609ff263aea"
+  Payjp::Charge.create(
+    amount: @item.price,
+    card: @purchase_form.token,
+    currency: 'jpy'
+  )
+  end
+
 end
