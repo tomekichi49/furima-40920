@@ -12,7 +12,7 @@ class PurchasesController < ApplicationController
   end
 
   def create
-    @purchase_form = PurchaseForm.new(purchase_params.merge(user_id: current_user.id, item_id: @item.id))
+    @purchase_form = PurchaseForm.new(purchase_params)
 
     if @purchase_form.save
       pay_item
@@ -31,7 +31,7 @@ class PurchasesController < ApplicationController
 
   def purchase_params
     params.require(:purchase_form).permit(:postal_code, :prefecture_id, :city, :addresses, :building, :phone_number, :token)
-    .merge(token: params[:token])
+    .merge(token: params[:token], user_id: current_user.id, item_id: @item.id)
   end
 
   def pay_item

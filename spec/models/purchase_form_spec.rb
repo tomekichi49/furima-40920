@@ -2,10 +2,13 @@ require 'rails_helper'
 
 RSpec.describe PurchaseForm, type: :model do
   before do
-    @purchase_form = FactoryBot.build(:purchase_form)
+    user = FactoryBot.create(:user)
+    item = FactoryBot.create(:item)
+    @purchase_form = FactoryBot.build(:purchase_form, user_id: user.id, item_id: item.id)
   end
 
   describe '商品購入' do
+    
     context '商品購入がうまくいくとき' do
       it '全ての項目が存在すれば登録できる' do
           expect(@purchase_form).to be_valid
@@ -23,7 +26,7 @@ RSpec.describe PurchaseForm, type: :model do
         @purchase_form.valid?
         expect(@purchase_form.errors.full_messages).to include("Token can't be blank")
       end
-      
+
       it '郵便番号が空では登録できない' do
           @purchase_form.postal_code = ''
           @purchase_form.valid?
@@ -71,6 +74,24 @@ RSpec.describe PurchaseForm, type: :model do
           @purchase_form.valid?
           expect(@purchase_form.errors.full_messages).to include('Phone number input only number')
       end
+      it '電話番号が9桁以下では登録できない' do
+        @purchase_form.phone_number = '090123456'
+        @purchase_form.valid?
+        expect(@purchase_form.errors.full_messages).to include('Phone number input only number')
+      end
+
+      it 'userが紐付いていなければ購入できない' do
+        @purchase_form.user_id = nil
+        @purchase_form.valid?
+        expect(@purchase_form.errors.full_messages).to include("User can't be blank")
+      end
+
+      it 'itemが紐付いていなければ購入できない' do
+        @purchase_form.item_id = nil
+        @purchase_form.valid?
+        expect(@purchase_form.errors.full_messages).to include("Item can't be blank")
+      end
+      
     end
   end
 end
