@@ -18,11 +18,11 @@ RSpec.describe ShippingAddress, type: :model do
     end
 
     it '不正な郵便番号フォーマットの場合、無効であること' do
-      invalid_postal_codes = ['1234567', '12-3456', '123-45678']
+      invalid_postal_codes = %w[1234567 12-3456 123-45678]
       invalid_postal_codes.each do |postal_code|
         @shipping_address.postal_code = postal_code
         @shipping_address.valid?
-        expect(@shipping_address.errors[:postal_code]).to include("is invalid")
+        expect(@shipping_address.errors[:postal_code]).to include('is invalid')
       end
     end
 
@@ -56,11 +56,11 @@ RSpec.describe ShippingAddress, type: :model do
     end
 
     it '不正な電話番号フォーマットの場合、無効であること' do
-      invalid_phone_numbers = ['090-1234-5678', '090123456789']
+      invalid_phone_numbers = %w[090-1234-5678 090123456789]
       invalid_phone_numbers.each do |phone_number|
         @shipping_address.phone_number = phone_number
         @shipping_address.valid?
-        expect(@shipping_address.errors[:phone_number]).to include("is invalid")
+        expect(@shipping_address.errors[:phone_number]).to include('is invalid')
       end
     end
   end

@@ -7,7 +7,7 @@ class PurchasesController < ApplicationController
       redirect_to root_path
       return
     end
-    gon.public_key = ENV["PAYJP_PUBLIC_KEY"]
+    gon.public_key = ENV['PAYJP_PUBLIC_KEY']
     @purchase_form = PurchaseForm.new
   end
 
@@ -31,16 +31,15 @@ class PurchasesController < ApplicationController
 
   def purchase_params
     params.require(:purchase_form).permit(:postal_code, :prefecture_id, :city, :addresses, :building, :phone_number, :token)
-    .merge(token: params[:token], user_id: current_user.id, item_id: @item.id)
+          .merge(token: params[:token], user_id: current_user.id, item_id: @item.id)
   end
 
   def pay_item
-    Payjp.api_key = ENV["PAYJP_SECRET_KEY"]
+    Payjp.api_key = ENV['PAYJP_SECRET_KEY']
     Payjp::Charge.create(
       amount: @item.price,
       card: @purchase_form.token,
       currency: 'jpy'
     )
   end
-
 end
