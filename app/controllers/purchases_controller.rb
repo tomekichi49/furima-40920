@@ -3,6 +3,10 @@ class PurchasesController < ApplicationController
   before_action :set_item, only: [:index, :create]
 
   def index
+    if @item.sold_out? || @item.user == current_user
+      redirect_to root_path
+      return
+    end
     gon.public_key = ENV["PAYJP_PUBLIC_KEY"]
     @purchase_form = PurchaseForm.new
   end
