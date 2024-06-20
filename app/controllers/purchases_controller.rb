@@ -13,13 +13,13 @@ class PurchasesController < ApplicationController
 
   def create
     @purchase_form = PurchaseForm.new(purchase_params)
-
-    if @purchase_form.save
+    if @purchase_form.valid?
       pay_item
+      @purchase_form.save
       redirect_to root_path
     else
-      puts @purchase_form.errors.full_messages
-      render :index
+      gon.public_key = ENV['PAYJP_PUBLIC_KEY']
+      render 'index', status: :unprocessable_entity
     end
   end
 
