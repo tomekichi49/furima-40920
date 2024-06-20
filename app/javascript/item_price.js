@@ -22,4 +22,5 @@ function post() {
   }
 }
 
-document.addEventListener('turbo:load', post);
+window.addEventListener('turbo:load', post);
+window.addEventListener("turbo:render", post);
